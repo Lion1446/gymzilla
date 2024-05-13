@@ -6,6 +6,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import MembersPage from './pages/MembersPage';
 import SettingsPage from './pages/SettingsPage';
 import MainLayout from './layouts/MainLayout';
+import LogsPage from './pages/LogsPage';
 
 const App = () => {
   return (
@@ -13,11 +14,12 @@ const App = () => {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<MainLayout />}>
-          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route index element={<DashboardPage />} />
+          <Route path="/attendances" element={<LogsPage />} />
           <Route path="/members" element={<MembersPage />} />
           <Route path="/settings" element={<SettingsPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
-        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>
   );

@@ -31,7 +31,6 @@ const SearchMember = ({ memberData, onSelect }) => {
     <Combobox
       value={selectedPerson}
       onChange={newPerson => {
-        // setSelectedPerson
         setSelectedPerson(newPerson);
         onSelect(newPerson);
       }}
@@ -41,10 +40,12 @@ const SearchMember = ({ memberData, onSelect }) => {
     >
       <ComboboxInput
         style={{
-          width: '90%',
+          width: '100%',
           height: '40px',
           padding: '8px 12px',
+          backgroundColor: 'white',
           border: '1px solid black',
+          color: 'black',
         }}
         aria-label="Assignee"
         displayValue={person => person?.name}
@@ -55,6 +56,7 @@ const SearchMember = ({ memberData, onSelect }) => {
       <div className="relative">
         <ComboboxOptions
           anchor="bottom"
+          style={{ backgroundColor: '1px solid black' }}
           className="empty:hidden z-50 absolute bg-white border border-gray-200 shadow-lg mt-1"
         >
           {filteredPeople.map(person => (

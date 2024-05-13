@@ -17,8 +17,15 @@ const DashboardPage = () => {
     if (!logs || !Array.isArray(logs)) {
       return 0;
     }
-    const today = new Date().toISOString().split('T')[0];
-    const todaysLogs = logs.filter(log => log.datetimeLogged.startsWith(today));
+    const today = new Date();
+    const options = { timeZone: 'Asia/Manila' }; // Set the timezone to Philippine time
+    const todayString = today.toLocaleDateString('en-US', options); // Get today's date in mm/dd/yyyy format
+
+    const todaysLogs = logs.filter(log => {
+      const logDate = new Date(log.datetimeLogged);
+      const logDateString = logDate.toLocaleDateString('en-US', options); // Get the date part of the log's datetimeLogged
+      return logDateString === todayString;
+    });
     return todaysLogs.length;
   };
 
@@ -39,11 +46,11 @@ const DashboardPage = () => {
       );
     });
 
-    return membersThisMonth.length;
+    return membersThisMonth;
   };
 
   const getMembersWithRenewalWithinMonth = data => {
-    if (!data || !data) return 0;
+    if (!data || !data.length) return []; // Return an empty array if data is falsy or empty
 
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth() + 1; // Months are zero-based, so add 1
@@ -55,7 +62,7 @@ const DashboardPage = () => {
       const renewalYear = renewalDate.getFullYear();
 
       return renewalMonth === currentMonth && renewalYear === currentYear;
-    }).length;
+    });
   };
 
   function getActiveMembersCount(members) {
@@ -77,13 +84,13 @@ const DashboardPage = () => {
     }, 0);
   }
 
-  function getExpiringMembershipsCount(members) {
-    if (!members || !members) return 0;
+  function getExpiringMemberships(members) {
+    if (!members || !members.length) return []; // Return an empty array if members is falsy or empty
     const currentDate = new Date();
     const nextWeek = new Date();
     nextWeek.setDate(currentDate.getDate() + 7); // Next week from current date
 
-    return members.reduce((count, member) => {
+    return members.reduce((expiringMemberships, member) => {
       const renewalDate = new Date(member.datetimeOfRenewal);
       const expirationDate = new Date(renewalDate);
       expirationDate.setDate(
@@ -95,45 +102,41 @@ const DashboardPage = () => {
         (expirationDate - currentDate) / (1000 * 60 * 60 * 24)
       );
       if (daysUntilExpiration <= 7 && daysUntilExpiration >= 0) {
-        return count + 1; // Increment count if membership is expiring within next 7 days
+        // Add the expiring membership to the array of expiring memberships
+        return [...expiringMemberships, member];
       } else {
-        return count; // Do not increment count otherwise
+        return expiringMemberships; // Do not modify the array if the membership is not expiring within next 7 days
       }
-    }, 0);
+    }, []);
   }
 
-  function getExpiredMembershipsCount(members) {
+  function getExpiredMembers(members) {
     if (!members || !members) return 0;
     const currentDate = new Date();
+    const expiredMembers = [];
 
-    return members.reduce((count, member) => {
+    members.forEach(member => {
       const renewalDate = new Date(member.datetimeOfRenewal);
       const expirationDate = new Date(renewalDate);
       expirationDate.setDate(
         renewalDate.getDate() + member.membershipValidityDays
       );
 
-      // Check if expiration date is before the current date
       if (expirationDate < currentDate) {
-        return count + 1; // Increment count if membership has expired
-      } else {
-        return count; // Do not increment count otherwise
+        expiredMembers.push(member);
       }
-    }, 0);
+    });
+
+    return expiredMembers;
   }
 
-  function initData() {
-    data = useContext(DashboardContext);
-    members = data['members'];
-    attendances = data['attendances'];
-  }
   const todaysAttendance = getTodaysAttendance(attendances);
   const totalMembersThisMonth = getTotalMembersThisMonth(members);
   const membersWithRenewalWithinMonth =
     getMembersWithRenewalWithinMonth(members);
   const activeMembersCount = getActiveMembersCount(members);
-  const expiringMembershipsCount = getExpiringMembershipsCount(members);
-  const expiredMembershipsCount = getExpiredMembershipsCount(members);
+  const expiringMemberships = getExpiringMemberships(members);
+  const expiredMemberships = getExpiredMembers(members);
 
   return (
     <div
@@ -206,12 +209,12 @@ const DashboardPage = () => {
             />
             <RegularStatsCard
               title="New members this month"
-              value={totalMembersThisMonth}
+              value={totalMembersThisMonth.length}
               iconData="newMembers"
             />
             <RegularStatsCard
               title="Renewed members this month"
-              value={membersWithRenewalWithinMonth}
+              value={membersWithRenewalWithinMonth.length}
               iconData="renewedMembers"
             />
           </div>
@@ -224,13 +227,13 @@ const DashboardPage = () => {
             />
             <ColoredStatsCard
               title={'Expiring memberships'}
-              value={expiringMembershipsCount}
+              value={expiringMemberships.length}
               iconData={'expiringMembers'}
               backgroundColor="#442A11"
             />
             <ColoredStatsCard
               title={'Expired membersips'}
-              value={expiredMembershipsCount}
+              value={expiredMemberships.length}
               iconData={'expiredMembers'}
               backgroundColor="#431418"
             />
@@ -243,9 +246,21 @@ const DashboardPage = () => {
           <div style={{ marginBottom: '20px' }}>
             <DateTimeDisplay />
           </div>
-          <MembershipStatusCard title="Expired Membership" type="expired" />
-          <MembershipStatusCard title="Expiring Membership" type="expiring" />
-          <MembershipStatusCard title="New Members" type="new" />
+          <MembershipStatusCard
+            membersToShow={expiredMemberships}
+            title="Expired Membership"
+            type="expired"
+          />
+          <MembershipStatusCard
+            membersToShow={expiringMemberships}
+            title="Expiring Membership"
+            type="expiring"
+          />
+          <MembershipStatusCard
+            membersToShow={totalMembersThisMonth}
+            title="New members this month"
+            type="new"
+          />
         </div>
       </div>
     </div>

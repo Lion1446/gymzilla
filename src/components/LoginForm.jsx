@@ -17,7 +17,7 @@ const LoginForm = () => {
       const data = await response.json();
       if (data.length > 0) {
         console.log('Login successful');
-        navigate('/dashboard', { replace: true });
+        navigate('/', { replace: true });
       } else {
         console.log('Invalid username or password');
       }

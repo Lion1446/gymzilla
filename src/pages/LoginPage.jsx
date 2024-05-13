@@ -11,7 +11,7 @@ const LoginPage = () => {
         backgroundPosition: 'center',
         display: 'flex',
         justifyContent: 'space-around',
-        alignItems: 'center',
+        agnItems: 'center',
       }}
     >
       <div

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaGaugeHigh, FaGear, FaUser } from 'react-icons/fa6';
+import { FaGaugeHigh, FaGear, FaUser, FaClipboardUser } from 'react-icons/fa6';
 import { NavLink } from 'react-router-dom';
 
 const SideNavBar = () => {
@@ -26,7 +26,7 @@ const SideNavBar = () => {
       >
         <NavLink
           className={linkClass}
-          to="/dashboard"
+          to="/"
           style={{
             color: 'white',
             height: '42px',
@@ -38,6 +38,21 @@ const SideNavBar = () => {
         >
           <FaGaugeHigh style={{ marginRight: '10px' }} />
           Dashboard
+        </NavLink>
+        <NavLink
+          className={linkClass}
+          to="/attendances"
+          style={{
+            color: 'white',
+            height: '42px',
+            width: '220px',
+            padding: '9px 24px',
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <FaClipboardUser style={{ marginRight: '10px' }} />
+          Attendances
         </NavLink>
         <NavLink
           className={linkClass}

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import SearchMember from './SearchMember';
 import { useNavigate } from 'react-router-dom';
 
-export default function Modal({ members, reloadData }) {
+export default function Modal({ members }) {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
@@ -19,7 +19,6 @@ export default function Modal({ members, reloadData }) {
   const handleModalClose = log => {
     setShowModal(false);
     if (log) {
-      console.log(selectedMember);
       const newAttendance = {
         idNumber: selectedMember.id,
         datetimeLogged: new Date().toISOString().slice(0, -5) + 'Z',

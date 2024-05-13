@@ -1,12 +1,12 @@
 import React from 'react';
 
-const MembershipCardMember = ({ name, date }) => {
+const MembershipCardMember = ({ name, date, isFormattedDate }) => {
   const formatDate = dateString => {
     const date = new Date(dateString);
     const options = { year: 'numeric', month: 'long', day: '2-digit' };
     return date.toLocaleDateString('en-US', options);
   };
-  const formattedDate = formatDate(date);
+  const formattedDate = isFormattedDate ? formatDate(date) : date;
   return (
     <div
       style={{
