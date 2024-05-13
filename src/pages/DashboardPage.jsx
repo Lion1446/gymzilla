@@ -1,7 +1,255 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { FaBell } from 'react-icons/fa6';
+import RegularStatsCard from '../components/RegularStatsCard';
+import ColoredStatsCard from '../components/ColoredStatsCard';
+import LineChart from '../components/LineChart';
+import DateTimeDisplay from '../components/TimeDisplay';
+import MembershipStatusCard from '../components/MembershipStatusCard';
+import { DashboardContext } from '../layouts/MainLayout';
+import Modal from '../components/Modal';
 
 const DashboardPage = () => {
-  return <h1>Dashboard</h1>;
+  let data = useContext(DashboardContext);
+  let members = data['members'];
+  let attendances = data['attendances'];
+
+  const getTodaysAttendance = logs => {
+    if (!logs || !Array.isArray(logs)) {
+      return 0;
+    }
+    const today = new Date().toISOString().split('T')[0];
+    const todaysLogs = logs.filter(log => log.datetimeLogged.startsWith(today));
+    return todaysLogs.length;
+  };
+
+  const getTotalMembersThisMonth = members => {
+    if (!members || !Array.isArray(members)) {
+      return 0;
+    }
+
+    const today = new Date();
+    const currentMonth = today.getMonth() + 1; // Months are zero-based, so add 1
+    const currentYear = today.getFullYear();
+
+    const membersThisMonth = members.filter(member => {
+      const membershipDate = new Date(member.datetimeOfMembership);
+      return (
+        membershipDate.getMonth() + 1 === currentMonth &&
+        membershipDate.getFullYear() === currentYear
+      );
+    });
+
+    return membersThisMonth.length;
+  };
+
+  const getMembersWithRenewalWithinMonth = data => {
+    if (!data || !data) return 0;
+
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1; // Months are zero-based, so add 1
+    const currentYear = currentDate.getFullYear();
+
+    return data.filter(datum => {
+      const renewalDate = new Date(datum.datetimeOfRenewal);
+      const renewalMonth = renewalDate.getMonth() + 1; // Months are zero-based, so add 1
+      const renewalYear = renewalDate.getFullYear();
+
+      return renewalMonth === currentMonth && renewalYear === currentYear;
+    }).length;
+  };
+
+  function getActiveMembersCount(members) {
+    if (!members || !members) return 0;
+    const currentDate = new Date();
+
+    return members.reduce((count, member) => {
+      const renewalDate = new Date(member.datetimeOfRenewal);
+      const expirationDate = new Date(renewalDate);
+      expirationDate.setDate(
+        renewalDate.getDate() + member.membershipValidityDays
+      );
+
+      if (expirationDate > currentDate) {
+        return count + 1; // Increment count if member is active
+      } else {
+        return count; // Do not increment count if member is not active
+      }
+    }, 0);
+  }
+
+  function getExpiringMembershipsCount(members) {
+    if (!members || !members) return 0;
+    const currentDate = new Date();
+    const nextWeek = new Date();
+    nextWeek.setDate(currentDate.getDate() + 7); // Next week from current date
+
+    return members.reduce((count, member) => {
+      const renewalDate = new Date(member.datetimeOfRenewal);
+      const expirationDate = new Date(renewalDate);
+      expirationDate.setDate(
+        renewalDate.getDate() + member.membershipValidityDays
+      );
+
+      // Check if expiration date is within the next 7 days or less
+      const daysUntilExpiration = Math.ceil(
+        (expirationDate - currentDate) / (1000 * 60 * 60 * 24)
+      );
+      if (daysUntilExpiration <= 7 && daysUntilExpiration >= 0) {
+        return count + 1; // Increment count if membership is expiring within next 7 days
+      } else {
+        return count; // Do not increment count otherwise
+      }
+    }, 0);
+  }
+
+  function getExpiredMembershipsCount(members) {
+    if (!members || !members) return 0;
+    const currentDate = new Date();
+
+    return members.reduce((count, member) => {
+      const renewalDate = new Date(member.datetimeOfRenewal);
+      const expirationDate = new Date(renewalDate);
+      expirationDate.setDate(
+        renewalDate.getDate() + member.membershipValidityDays
+      );
+
+      // Check if expiration date is before the current date
+      if (expirationDate < currentDate) {
+        return count + 1; // Increment count if membership has expired
+      } else {
+        return count; // Do not increment count otherwise
+      }
+    }, 0);
+  }
+
+  function initData() {
+    data = useContext(DashboardContext);
+    members = data['members'];
+    attendances = data['attendances'];
+  }
+  const todaysAttendance = getTodaysAttendance(attendances);
+  const totalMembersThisMonth = getTotalMembersThisMonth(members);
+  const membersWithRenewalWithinMonth =
+    getMembersWithRenewalWithinMonth(members);
+  const activeMembersCount = getActiveMembersCount(members);
+  const expiringMembershipsCount = getExpiringMembershipsCount(members);
+  const expiredMembershipsCount = getExpiredMembershipsCount(members);
+
+  return (
+    <div
+      style={{
+        flex: 6,
+        backgroundColor: '#0F0F0F',
+        height: '100vh',
+        overflow: 'scroll',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <div
+        style={{
+          flex: 1,
+          borderBottom: '1px solid #262626',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'end',
+        }}
+      >
+        <Modal members={data['members']} />
+        <FaBell
+          style={{ margin: '0px 30px', height: '24px', color: 'white' }}
+        />
+        <div
+          style={{
+            display: 'flex',
+            borderLeft: '1px solid white',
+            alignItems: 'center',
+            color: 'white',
+            padding: '8px 30px',
+          }}
+        >
+          <img
+            src="src/assets/lion_diaz.png"
+            alt="lion_diaz.png"
+            width="35px"
+            height="35px"
+          />
+          <p style={{ margin: '0px 10px' }}>Lionelle Diaz</p>
+        </div>
+      </div>
+      <div
+        style={{
+          flex: 10,
+          borderBottom: '1px solid #262626',
+          padding: '30px',
+          display: 'flex',
+        }}
+      >
+        <div style={{ flex: '8' }}>
+          <h1 style={{ color: 'white', fontSize: '32px' }}>
+            Good day, Lionelle!
+          </h1>
+          <h3 style={{ color: 'white', fontSize: '16px', margin: '10px 0px' }}>
+            Overview
+          </h3>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-around',
+              marginBottom: '10px',
+            }}
+          >
+            <RegularStatsCard
+              title="Today's Attendance"
+              value={todaysAttendance}
+              iconData="attendance"
+            />
+            <RegularStatsCard
+              title="New members this month"
+              value={totalMembersThisMonth}
+              iconData="newMembers"
+            />
+            <RegularStatsCard
+              title="Renewed members this month"
+              value={membersWithRenewalWithinMonth}
+              iconData="renewedMembers"
+            />
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+            <ColoredStatsCard
+              title={'Total active members'}
+              value={activeMembersCount}
+              iconData={'activeMembers'}
+              backgroundColor="#2E3C10"
+            />
+            <ColoredStatsCard
+              title={'Expiring memberships'}
+              value={expiringMembershipsCount}
+              iconData={'expiringMembers'}
+              backgroundColor="#442A11"
+            />
+            <ColoredStatsCard
+              title={'Expired membersips'}
+              value={expiredMembershipsCount}
+              iconData={'expiredMembers'}
+              backgroundColor="#431418"
+            />
+          </div>
+          <div>
+            <LineChart />
+          </div>
+        </div>
+        <div style={{ flex: '3' }}>
+          <div style={{ marginBottom: '20px' }}>
+            <DateTimeDisplay />
+          </div>
+          <MembershipStatusCard title="Expired Membership" type="expired" />
+          <MembershipStatusCard title="Expiring Membership" type="expiring" />
+          <MembershipStatusCard title="New Members" type="new" />
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default DashboardPage;
