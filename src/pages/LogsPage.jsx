@@ -49,7 +49,12 @@ const LogsPage = () => {
   };
 
   const createAttendance = async newAttendance => {
-    await fetch('/api/logs', {
+    // await fetch('/api/logs', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'applications/json' },
+    //   body: JSON.stringify(newAttendance),
+    // });
+    await fetch('https://gymzilla.onrender.com/logs', {
       method: 'POST',
       headers: { 'Content-Type': 'applications/json' },
       body: JSON.stringify(newAttendance),

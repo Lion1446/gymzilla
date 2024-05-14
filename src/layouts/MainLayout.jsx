@@ -11,10 +11,12 @@ const MainLayout = () => {
   useEffect(() => {
     const fetchMembers = async () => {
       try {
-        let res = await fetch('/api/members');
+        // let res = await fetch('/api/members');
+        let res = await fetch('https://gymzilla.onrender.com/members');
         let data = await res.json();
         setMembers(data);
-        res = await fetch('/api/logs');
+        res = await fetch('https://gymzilla.onrender.com/logs');
+        // res = await fetch('/api/logs');
         data = await res.json();
         setAttendances(data);
       } catch (e) {
