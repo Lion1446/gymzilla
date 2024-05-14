@@ -40,7 +40,9 @@ const SideNavBar = () => {
         >
           <NavLink
             className={linkClass}
-            to="/app/dashboard"
+            to="/dashboard"
+            end
+            activeClassName="active"
             style={{
               color: 'white',
               height: '42px',
@@ -55,7 +57,7 @@ const SideNavBar = () => {
           </NavLink>
           <NavLink
             className={linkClass}
-            to="/app/attendances"
+            to="/dashboard/attendances"
             style={{
               color: 'white',
               height: '42px',
@@ -70,7 +72,7 @@ const SideNavBar = () => {
           </NavLink>
           <NavLink
             className={linkClass}
-            to="/app/members"
+            to="/dashboard/members"
             style={{
               color: 'white',
               height: '42px',
@@ -84,7 +86,7 @@ const SideNavBar = () => {
           </NavLink>
           <NavLink
             className={linkClass}
-            to="/app/settings"
+            to="/dashboard/settings"
             style={{
               color: 'white',
               height: '42px',

@@ -13,6 +13,15 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/" element={<LoginPage />} />
+        <Route path="/dashboard/*" element={<MainLayout />}>
+          <Route index element={<DashboardPage />} />
+          <Route path="members" element={<MembersPage />} />
+          <Route path="settings" element={<SettingsPage />} />
+          <Route path="attendances" element={<LogsPage />} />
+        </Route>
+        <Route path="*" element={<NotFoundPage />} />
+
+        {/* <Route path="/" element={<LoginPage />} />
         <Route path="/app" element={<MainLayout />}>
           <Route path="dashboard/" element={<DashboardPage />} />
           <Route path="attendances/" element={<LogsPage />} />
@@ -20,6 +29,7 @@ const App = () => {
           <Route path="settings/" element={<SettingsPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
+      </Routes> */}
       </Routes>
     </Router>
   );
