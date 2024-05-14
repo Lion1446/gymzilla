@@ -172,7 +172,7 @@ const DashboardPage = () => {
           }}
         >
           <img
-            src="src/assets/lion_diaz.png"
+            src="/lion_diaz.png"
             alt="lion_diaz.png"
             width="35px"
             height="35px"

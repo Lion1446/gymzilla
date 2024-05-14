@@ -16,7 +16,7 @@ const SideNavBar = () => {
         alignItems: 'center',
       }}
     >
-      <img src="src/assets/Gymzilla_logo 1.png" alt="gymzilla-logo" />
+      <img src="/Gymzilla_logo 1.png" alt="gymzilla-logo" />
       <div
         style={{
           display: 'flex',

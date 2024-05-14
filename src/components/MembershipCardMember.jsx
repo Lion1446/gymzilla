@@ -17,7 +17,7 @@ const MembershipCardMember = ({ name, date, isFormattedDate }) => {
       }}
     >
       <div style={{ width: '35px' }}>
-        <img src="src/assets/arlene_mccoy.png" alt="arlene_mccoy.png" />
+        <img src="/arlene_mccoy.png" alt="arlene_mccoy.png" />
       </div>
       <div
         style={{
