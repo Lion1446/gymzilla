@@ -69,7 +69,7 @@ const LogsPage = () => {
         datetimeLogged: new Date().toISOString().slice(0, -5) + 'Z',
       };
       await createAttendance(newAttendance);
-      navigate(0);
+      window.location.reload();
     } else {
       console.log('Do nothing');
     }

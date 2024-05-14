@@ -21,7 +21,6 @@ export default function Modal({ members }) {
     });
     return;
   };
-
   const handleModalClose = async log => {
     setShowModal(false);
     if (log) {
@@ -30,7 +29,7 @@ export default function Modal({ members }) {
         datetimeLogged: new Date().toISOString().slice(0, -5) + 'Z',
       };
       await createAttendance(newAttendance);
-      navigate(0);
+      window.location.reload();
     } else {
       console.log('Do nothing');
     }
