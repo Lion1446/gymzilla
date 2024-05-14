@@ -47,7 +47,7 @@ const MembershipStatusCard = ({ title, type, membersToShow }) => {
               />
             ))
         : null}
-      <Link to="/members">
+      <Link to="/app/members">
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <FaArrowRight style={{ color: '#F27370', margin: '10px' }} />
           <p style={{ color: '#F27370' }}>View All</p>

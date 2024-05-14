@@ -8,7 +8,13 @@ export default function Modal({ members }) {
   const [selectedMember, setSelectedMember] = useState(null);
 
   const createAttendance = async newAttendance => {
-    await fetch('/api/logs', {
+    // await fetch('/api/logs', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'applications/json' },
+    //   body: JSON.stringify(newAttendance),
+    // });
+    // return;
+    await fetch('https://gymzilla.onrender.com/logs', {
       method: 'POST',
       headers: { 'Content-Type': 'applications/json' },
       body: JSON.stringify(newAttendance),
@@ -16,14 +22,14 @@ export default function Modal({ members }) {
     return;
   };
 
-  const handleModalClose = log => {
+  const handleModalClose = async log => {
     setShowModal(false);
     if (log) {
       const newAttendance = {
         idNumber: selectedMember.id,
         datetimeLogged: new Date().toISOString().slice(0, -5) + 'Z',
       };
-      createAttendance(newAttendance);
+      await createAttendance(newAttendance);
       navigate(0);
     } else {
       console.log('Do nothing');
@@ -68,6 +74,7 @@ export default function Modal({ members }) {
                     To log your attendance, type in the name in the search bar.
                   </p>
                   <SearchMember
+                    hasDarkBG={false}
                     memberData={members}
                     onSelect={handleSelectedMember}
                   />

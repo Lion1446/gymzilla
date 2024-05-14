@@ -62,13 +62,13 @@ const LogsPage = () => {
     return;
   };
 
-  const handleLogAttendance = log => {
+  const handleLogAttendance = async log => {
     if (log) {
       const newAttendance = {
         idNumber: selectedMember.id,
         datetimeLogged: new Date().toISOString().slice(0, -5) + 'Z',
       };
-      createAttendance(newAttendance);
+      await createAttendance(newAttendance);
       navigate(0);
     } else {
       console.log('Do nothing');

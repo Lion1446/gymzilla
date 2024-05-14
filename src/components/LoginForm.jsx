@@ -11,13 +11,16 @@ const LoginForm = () => {
     e.preventDefault();
     try {
       const response = await fetch(
-        '/api/users?username=' + username + '&password=' + password,
+        'https://gymzilla.onrender.com/users?username=' +
+          username +
+          '&password=' +
+          password,
         { method: 'GET' }
       );
       const data = await response.json();
       if (data.length > 0) {
         console.log('Login successful');
-        navigate('/', { replace: true });
+        navigate('/app/dashboard', { replace: true });
       } else {
         console.log('Invalid username or password');
       }
