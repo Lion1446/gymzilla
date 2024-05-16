@@ -11,7 +11,7 @@ const LoginForm = () => {
     e.preventDefault();
     try {
       const response = await fetch(
-        'https://gymzilla.onrender.com/users?username=' +
+        'https://gymzilla-json-server.vercel.app/users?username=' +
           username +
           '&password=' +
           password,
