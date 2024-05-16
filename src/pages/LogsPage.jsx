@@ -70,8 +70,6 @@ const LogsPage = () => {
       };
       await createAttendance(newAttendance);
       window.location.reload();
-    } else {
-      console.log('Do nothing');
     }
   };
 

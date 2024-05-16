@@ -30,8 +30,6 @@ export default function Modal({ members }) {
       };
       await createAttendance(newAttendance);
       window.location.reload();
-    } else {
-      console.log('Do nothing');
     }
   };
 

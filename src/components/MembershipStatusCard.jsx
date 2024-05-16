@@ -5,7 +5,6 @@ import { DashboardContext } from '../layouts/MainLayout';
 import { Link } from 'react-router-dom';
 
 const MembershipStatusCard = ({ title, type, membersToShow }) => {
-  console.log(membersToShow);
   function addDays(date, days) {
     const newDate = new Date(date);
     const millisecondsPerDay = 24 * 60 * 60 * 1000;
