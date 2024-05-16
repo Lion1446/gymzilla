@@ -19,13 +19,13 @@ const LoginForm = () => {
       );
       const data = await response.json();
       if (data.length > 0) {
-        console.log('Login successful');
+        // console.log('Login successful');
         navigate('/dashboard', { replace: true });
       } else {
-        console.log('Invalid username or password');
+        alert('Invalid username or password');
       }
     } catch (error) {
-      console.error('Error:', error);
+      alert('Error:', error);
     }
   };
 
