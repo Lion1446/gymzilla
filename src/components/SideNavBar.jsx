@@ -42,7 +42,6 @@ const SideNavBar = () => {
             className={linkClass}
             to="/dashboard"
             end
-            activeClassName="active"
             style={{
               color: 'white',
               height: '42px',

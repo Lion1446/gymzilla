@@ -14,7 +14,7 @@ export default function Modal({ members }) {
     //   body: JSON.stringify(newAttendance),
     // });
     // return;
-    await fetch('https://gymzilla-json-server.vercel.app/logs', {
+    await fetch('https://gymzilla.onrender.com/logs', {
       method: 'POST',
       headers: { 'Content-Type': 'applications/json' },
       body: JSON.stringify(newAttendance),

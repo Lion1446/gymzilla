@@ -54,7 +54,7 @@ const LogsPage = () => {
     //   headers: { 'Content-Type': 'applications/json' },
     //   body: JSON.stringify(newAttendance),
     // });
-    await fetch('https://gymzilla-json-server.vercel.app/logs', {
+    const res = await fetch('https://gymzilla.onrender.com/logs', {
       method: 'POST',
       headers: { 'Content-Type': 'applications/json' },
       body: JSON.stringify(newAttendance),
